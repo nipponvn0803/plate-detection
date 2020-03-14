@@ -38,7 +38,7 @@ def fine_tune(lp):
     return newString
 
 # Đường dẫn ảnh
-img_path = "C:/Users/vuong/Desktop/new1/Detection_LP/car2.jpg"
+img_path = "C:/Users/vuong/Desktop/new1/Detection_LP/test011.jpg"
 
 # Load model LP detection
 wpod_net_path = "wpod-net_update1.json"
@@ -62,15 +62,30 @@ LpImg=im2single(YoloImg)
 
 if (len(LpImg)):
 
-    # Chuyen doi anh bien so
-    LpImg = cv2.convertScaleAbs(LpImg, alpha=(255.0))
-    roi = LpImg
-    # Chuyen anh bien so ve gray
-    gray = cv2.cvtColor( LpImg, cv2.COLOR_BGR2GRAY)
-
-    # Ap dung threshold de phan tach so va nen
-    binary = cv2.threshold(gray, 127, 255,
+# =============================================================================
+#     # Chuyen doi anh bien so
+#     LpImg = cv2.convertScaleAbs(LpImg, alpha=(255.0))
+#     roi = LpImg
+#     # Chuyen anh bien so ve gray
+#     LpImg 
+#     LpImg = cv2.adaptiveThreshold(img,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,\
+#             cv2.THRESH_BINARY,11,2)
+#     gray = cv2.cvtColor( LpImg, cv2.COLOR_BGR2GRAY)
+#     
+#     # Ap dung threshold de phan tach so va nen
+#     binary = cv2.threshold(gray, 127, 255,
+#                          cv2.THRESH_BINARY_INV)[1]
+# 
+# =============================================================================
+    roi = cv2.convertScaleAbs(LpImg, alpha=(255.0))
+    
+    gray = cv2.cvtColor(YoloImg, cv2.COLOR_BGR2GRAY)
+    gray = cv2.medianBlur(gray,5)
+    binary = cv2.adaptiveThreshold(gray,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
+    binary = cv2.threshold(binary, 127, 255,
                          cv2.THRESH_BINARY_INV)[1]
+    
+
 
     cv2.imshow("Anh bien so sau threshold", binary)
     cv2.waitKey()
