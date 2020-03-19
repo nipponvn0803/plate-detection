@@ -40,10 +40,6 @@ def fine_tune(lp):
 # Đường dẫn ảnh
 img_path = "C:/Users/vuong/Desktop/new1/Detection_LP/test011.jpg"
 
-# Load model LP detection
-wpod_net_path = "wpod-net_update1.json"
-wpod_net = load_model(wpod_net_path)
-
 # Đọc file ảnh đầu vào
 Ivehicle = cv2.imread(img_path)
 
@@ -77,11 +73,11 @@ if (len(LpImg)):
 #                          cv2.THRESH_BINARY_INV)[1]
 # 
 # =============================================================================
+      
     roi = cv2.convertScaleAbs(LpImg, alpha=(255.0))
     
     gray = cv2.cvtColor(YoloImg, cv2.COLOR_BGR2GRAY)
-    gray = cv2.medianBlur(gray,5)
-    binary = cv2.adaptiveThreshold(gray,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
+    binary = cv2.adaptiveThreshold(gray,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,11,2)
     binary = cv2.threshold(binary, 127, 255,
                          cv2.THRESH_BINARY_INV)[1]
     
@@ -101,7 +97,7 @@ if (len(LpImg)):
         (x, y, w, h) = cv2.boundingRect(c)
         ratio = h/w
         if 1<=ratio<=3.5: # Chon cac contour dam bao ve ratio w/h
-            if h/roi.shape[0]>=0.6: # Chon cac contour cao tu 60% bien so tro len
+            if h/roi.shape[0]>=0.2: # Chon cac contour cao tu 60% bien so tro len
 
                 # Ve khung chu nhat quanh so
                 cv2.rectangle(roi, (x, y), (x + w, y + h), (0, 255, 0), 2)
